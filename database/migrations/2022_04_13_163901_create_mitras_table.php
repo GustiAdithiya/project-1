@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateMitrasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('produks', function (Blueprint $table) {
+        Schema::create('mitras', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('kategori');
-            $table->integer('harga');
-            $table->integer('stok');
-            $table->string('image');
-            $table->integer('idmitra');
+            $table->string('namaPt');
+            $table->string('namaAdminPt');
+            $table->enum('jk',['laki-laki','perempuan']);
+            $table->string('notelp');
+            $table->string('email');
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produks');
+        Schema::dropIfExists('mitras');
     }
-};
+}

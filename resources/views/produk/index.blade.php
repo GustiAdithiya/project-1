@@ -26,6 +26,15 @@
         <th width="250px" class="text-center">Kategori</th>
         <th width="250px" class="text-center">Harga</th>
         <th width="100px" class="text-center">Stok</th>
+        <?php
+
+        use Illuminate\Support\Facades\Auth;
+
+        if (Auth::user()->akses == "1") {
+            echo '<th width="100px" class="text-center">ID Mitra</th>';
+        }
+        ?>
+
         <th width="280px">Action</th>
     </tr>
     @foreach ($produk as $produks)
@@ -36,6 +45,12 @@
         <td>{{ $produks->kategori }}</td>
         <td>{{ $produks->harga }}</td>
         <td>{{ $produks->stok }}</td>
+        <?php
+        if (Auth::user()->akses == "1") {
+            echo '<td>' . $produks->idmitra . '</td>';
+        }
+        ?>
+
         <td class="text-center">
             <form action="{{ route('produk.destroy',$produks->id) }}" method="POST">
 
@@ -52,5 +67,5 @@
     </tr>
     @endforeach
 </table>
-
+<!-- {{ $produk->links() }} -->
 @endsection

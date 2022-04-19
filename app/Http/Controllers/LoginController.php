@@ -12,7 +12,7 @@ class LoginController extends Controller
     {
         if (Auth::check()) {
             return redirect('produk');
-        }else{
+        } else {
             return view('login');
         }
     }
@@ -26,8 +26,8 @@ class LoginController extends Controller
 
         if (Auth::Attempt($data)) {
             return redirect('produk');
-        }else{
-            Session::flash('error', 'Email atau Password Salah');
+        } else {
+            Auth::flash('error', 'Email atau Password Salah');
             return redirect('/');
         }
     }

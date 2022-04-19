@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProdukController extends Controller
@@ -15,9 +16,10 @@ class ProdukController extends Controller
      */
     public function index()
     {
+        // $produk = Produk::latest()->paginate(1);
+        // return view('produk.index', ['produk' => $produk]);
         $produk = Produk::latest()->paginate(5);
-        return view('produk.index', compact('produk'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('produk.index', compact('produk'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -44,6 +46,7 @@ class ProdukController extends Controller
             'harga' => 'required',
             'stok' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'idmitra' => 'required',
         ]);
 
         // $input = $request->all();
@@ -66,6 +69,7 @@ class ProdukController extends Controller
         $upload->kategori = $request->input('kategori');
         $upload->harga = $request->input('harga');
         $upload->stok = $request->input('stok');
+        $upload->idmitra = $request->input('idmitra');
         $upload->save();
 
         return redirect()->route('produk.index')->with('succes', 'Data Berhasil di Input');
@@ -107,18 +111,24 @@ class ProdukController extends Controller
             'kategori' => 'required',
             'harga' => 'required',
             'stok' => 'required',
+            // 'idmitra' => 'required',
         ]);
 
         //$produk->update($request->all());
+        if ($request->file('image') != null) {
+            $file = $request->file('image');
+            $nama_file = date('YmdHis') . "." . $file->getClientOriginalExtension();
+            $file->move('image/', $nama_file);
+            $produk->image = $nama_file;
+        } else {
+            $produk->image = $request->input('imagelama');
+        }
 
-        $file = $request->file('image');
-        $nama_file = date('YmdHis') . "." . $file->getClientOriginalExtension();
-        $file->move('image/', $nama_file);
-        $produk->image = $nama_file;
         $produk->nama = $request->input('nama');
         $produk->kategori = $request->input('kategori');
         $produk->harga = $request->input('harga');
         $produk->stok = $request->input('stok');
+        $produk->idmitra = $request->input('idmitra');
         $produk->update();
 
         return redirect()->route('produk.index')->with('succes', 'Produk Berhasil di Update');

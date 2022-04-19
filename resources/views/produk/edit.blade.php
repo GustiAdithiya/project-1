@@ -37,12 +37,18 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Kategori:</strong>
-                <input type="text" name="kategori" value="{{ $produk->kategori }}" class="form-control" placeholder="Kategori">
-                <!-- <select class="form-select" name="kategori">
-                    <option value="pertanian">Pertanian</option>
-                    <option value="perikanan">Perikanan</option>
-                    <option value="perkebunan">Perkebunan</option>
-                </select> -->
+                <!-- <input type="text" name="kategori" value="{{ $produk->kategori }}" class="form-control" placeholder="Kategori"> -->
+                <select class="form-select" name="kategori">
+                    <option value="Pertanian" <?php if ($produk->kategori == 'Pertanian') {
+                                                    echo 'selected';
+                                                } ?>>Pertanian</option>
+                    <option value="Perikanan" <?php if ($produk->kategori == 'Perikanan') {
+                                                    echo 'selected';
+                                                } ?>>Perikanan</option>
+                    <option value="Perkebunan" <?php if ($produk->kategori == 'Perkebunan') {
+                                                    echo 'selected';
+                                                } ?>>Perkebunan</option>
+                </select>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -61,9 +67,30 @@
             <div class="form-group">
                 <strong>Image:<br></strong>
                 <img src="/image/{{ $produk->image }}" width="200px">
-                <input type="file" name="image" class="form-control" placeholder="image">
+                <input type="file" name="image" class="form-control">
+                <input type="hidden" name="imagelama" value="{{ $produk->image }}">
             </div>
         </div>
+        <?php
+
+        use Illuminate\Support\Facades\Auth;
+
+        if (Auth::user()->akses == "1") {
+            echo '<div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Id Mitra:</strong>
+                <input type="text" name="idmitra" class="form-control" value="' . $produk->idmitra . '" placeholder="Mitra">
+            </div>
+            </div>';
+        } else {
+            echo '<div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <input type="hidden" name="idmitra" class="form-control" value="' . $produk->idmitra . '" placeholder="Mitra">
+            </div>
+            </div>';
+        }
+        ?>
+
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
             <strong><br></strong>
             <div class="d-grid gap-2 col-6 mx-auto">
